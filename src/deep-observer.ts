@@ -1,15 +1,15 @@
-import attachDeepProxy, { ProxyEventCallbackFn } from './deep-proxy.ts';
+import attachDeepProxy, { type ProxyEventCallbackFn } from './deep-proxy.ts';
 
 interface ObserverInstanceI {
-	observed: Object;
+	observed: object;
 	callbacks: ProxyEventCallbackFn[];
 }
 const map = new WeakMap<WeakKey, ObserverInstanceI>();
 
-export function createDeepObserver<T extends Object>(
+export function createDeepObserver<T extends object>(
 	target: T,
 	callback: ProxyEventCallbackFn,
-) {
+): T {
 	let instance = map.get(target);
 
 	if (!instance) {
@@ -23,13 +23,13 @@ export function createDeepObserver<T extends Object>(
 	}
 
 	instance.callbacks.push(callback);
-	return instance.observed;
+	return instance.observed as T;
 }
 
-export function removeDeepObserver<T extends Object>(
+export function removeDeepObserver<T extends object>(
 	target: T,
 	callback: ProxyEventCallbackFn,
-) {
+): void {
 	const instance = map.get(target);
 	if (!instance) return;
 

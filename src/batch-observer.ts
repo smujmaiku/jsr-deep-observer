@@ -1,4 +1,4 @@
-import { PropT, ProxyEventCallbackFn } from './deep-proxy.ts';
+import type { PropT, ProxyEventCallbackFn } from './deep-proxy.ts';
 import createDeepObserver, { removeDeepObserver } from './deep-observer.ts';
 
 export type BatchedEventCallbackFn = (prop: PropT[][]) => void;
@@ -7,11 +7,11 @@ const batchedMap = new WeakMap<
 	WeakMap<BatchedEventCallbackFn, ProxyEventCallbackFn>
 >();
 
-export function createDeepObserverBatched<T extends Object>(
+export function createDeepObserverBatched<T extends object>(
 	target: T,
 	callback: BatchedEventCallbackFn,
 	delay: number,
-) {
+): T {
 	let timer: number | undefined;
 	let batch: Parameters<BatchedEventCallbackFn>[0] = [];
 
@@ -40,10 +40,10 @@ export function createDeepObserverBatched<T extends Object>(
 	return observed;
 }
 
-export function removeDeepObserverBatched<T extends Object>(
+export function removeDeepObserverBatched<T extends object>(
 	target: T,
 	callback: BatchedEventCallbackFn,
-) {
+): void {
 	const callbacks = batchedMap.get(target);
 	if (!callbacks) return;
 

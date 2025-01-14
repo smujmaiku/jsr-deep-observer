@@ -2,10 +2,10 @@ export type PropT = string | symbol;
 
 export type ProxyEventCallbackFn = (prop: PropT[]) => void;
 
-export function attachDeepProxy<T extends Object>(
+export function attachDeepProxy<T extends object>(
 	target: T,
 	callback: ProxyEventCallbackFn,
-) {
+): T {
 	return new Proxy(target, {
 		get: (target, prop) => {
 			const value = Reflect.get(target, prop);
