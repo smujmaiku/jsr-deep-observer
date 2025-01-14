@@ -1,0 +1,16 @@
+{
+	"name": "@smujdev/deep-observer",
+	"version": "0.1.0",
+	"license": "MIT",
+	"exports": "./src/deep-observer.ts",
+	"publish": {
+		"include": [
+			"readme.md",
+			"src/**/*.ts"
+		]
+	},
+	"fmt": {
+		"singleQuote": true,
+		"useTabs": true
+	}
+}
