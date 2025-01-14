@@ -2,6 +2,7 @@ import type { PropT, ProxyEventCallbackFn } from './deep-proxy.ts';
 import createDeepObserver, { removeDeepObserver } from './deep-observer.ts';
 
 export type BatchedEventCallbackFn = (prop: PropT[][]) => void;
+
 const batchedMap = new WeakMap<
 	WeakKey,
 	WeakMap<BatchedEventCallbackFn, ProxyEventCallbackFn>

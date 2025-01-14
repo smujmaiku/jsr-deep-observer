@@ -39,4 +39,7 @@ export function removeDeepObserver<T extends object>(
 	instance.callbacks.splice(index, 1);
 }
 
+export * from './deep-proxy.ts'
+export * from './batch-observer.ts';
+
 export default createDeepObserver;
