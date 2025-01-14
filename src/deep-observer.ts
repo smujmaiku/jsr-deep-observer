@@ -1,4 +1,4 @@
-import attachDeepProxy, { ProxyEventCallbackFn } from './deep-proxy';
+import attachDeepProxy, { ProxyEventCallbackFn } from './deep-proxy.ts';
 
 interface ObserverInstanceI {
 	observed: Object;
