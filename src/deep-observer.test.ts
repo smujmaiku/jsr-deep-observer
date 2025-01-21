@@ -1,5 +1,8 @@
 import { expect, fn } from 'jsr:@std/expect';
-import createDeepObserver, {removeDeepObserver, ProxyEventCallbackFn } from './deep-observer.ts';
+import createDeepObserver, {
+	ProxyEventCallbackFn,
+	removeDeepObserver,
+} from './deep-observer.ts';
 
 Deno.test('callback is called when instance changes', () => {
 	const state: any = { a: { b: 1 } };
@@ -32,7 +35,7 @@ Deno.test('instances should be combined when possible', () => {
 	expect(createDeepObserver(instance, () => {})).toBe(instance);
 });
 
-Deno.test('callback can be removed from an instance',()=>{
+Deno.test('callback can be removed from an instance', () => {
 	const state: any = { a: { b: 1 } };
 	const cb = fn() as ProxyEventCallbackFn;
 	const cb2 = fn() as ProxyEventCallbackFn;
@@ -45,4 +48,4 @@ Deno.test('callback can be removed from an instance',()=>{
 	instance.a.c = 3;
 	expect(cb).not.toBeCalled();
 	expect(cb2).toBeCalledWith(['a', 'c']);
-})
+});
