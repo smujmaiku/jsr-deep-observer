@@ -1,5 +1,6 @@
 import { expect, fn } from 'jsr:@std/expect';
 import createDeepProxy, {
+	checkDeepProxy,
 	getDeepProxyTarget,
 	ProxyEventCallbackFn,
 } from './deep-proxy.ts';
@@ -29,5 +30,34 @@ Deno.test('target is recoverable', () => {
 	const instance = createDeepProxy(state, cb);
 
 	expect(instance).not.toBe(state);
+	expect(checkDeepProxy(instance)).toBeTruthy();
 	expect(getDeepProxyTarget(instance)).toBe(state);
+
+	expect(checkDeepProxy(state)).toBeFalsy();
+	expect(() => getDeepProxyTarget(state)).toThrow();
+});
+
+Deno.test('invalid value types are thrown', () => {
+	const cb = fn() as ProxyEventCallbackFn;
+
+	const instance = createDeepProxy({} as any, cb);
+
+	expect(() => instance.a = new Map()).toThrow();
+	expect(() => instance.b = new Set()).toThrow();
+	expect(() => instance.c = function () {}).toThrow();
+	expect(() => instance.d = () => {}).toThrow();
+
+	expect(() => createDeepProxy(new Map(), cb)).toThrow();
+	expect(() => createDeepProxy(new Set(), cb)).toThrow();
+	expect(() => createDeepProxy(function () {}, cb)).toThrow();
+	expect(() => createDeepProxy(() => {}, cb)).toThrow();
+});
+
+Deno.test('reserved symbols are thrown', () => {
+	const cb = fn() as ProxyEventCallbackFn;
+
+	const instance = createDeepProxy({} as any, cb);
+
+	expect(() => instance[createDeepProxy.targetSymbol] = 1).toThrow();
+	expect(() => delete instance[createDeepProxy.targetSymbol]).toThrow();
 });

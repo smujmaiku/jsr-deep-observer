@@ -10,8 +10,8 @@ function preventInvalidTypes(value: unknown): void {
 	}
 }
 
-function preventInvalidProps(prop:unknown): void{
-	if(prop === createDeepProxy.targetSymbol) throw new Error();
+function preventInvalidProps(prop: unknown): void {
+	if (prop === createDeepProxy.targetSymbol) throw new Error();
 }
 
 export function createDeepProxy<T extends object>(
