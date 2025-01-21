@@ -43,12 +43,14 @@ export function createDeepObserverBatched<T extends object>(
 
 export function removeDeepObserverBatched<T extends object>(
 	target: T,
-	callback: BatchedEventCallbackFn,
+	callback: Function,
 ): void {
 	const callbacks = batchedMap.get(target);
 	if (!callbacks) return;
 
-	const batchedCb = callbacks.get(callback);
+	const batchedCb = callbacks.get(callback as BatchedEventCallbackFn);
 	if (!batchedCb) return;
 	removeDeepObserver(target, batchedCb);
 }
+
+export default createDeepObserverBatched;

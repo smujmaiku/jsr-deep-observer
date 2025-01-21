@@ -1,4 +1,4 @@
-import attachDeepProxy, { type ProxyEventCallbackFn } from './deep-proxy.ts';
+import createDeepProxy, { type ProxyEventCallbackFn } from './deep-proxy.ts';
 
 interface ObserverInstanceI {
 	observed: object;
@@ -13,7 +13,7 @@ export function createDeepObserver<T extends object>(
 	let instance = map.get(target);
 
 	if (!instance) {
-		const observed = attachDeepProxy(
+		const observed = createDeepProxy(
 			target,
 			(p) => instance?.callbacks.forEach((c) => c(p)),
 		);
@@ -28,18 +28,18 @@ export function createDeepObserver<T extends object>(
 
 export function removeDeepObserver<T extends object>(
 	target: T,
-	callback: ProxyEventCallbackFn,
+	callback: Function,
 ): void {
 	const instance = map.get(target);
 	if (!instance) return;
 
-	const index = instance.callbacks.indexOf(callback);
+	const index = instance.callbacks.indexOf(callback as ProxyEventCallbackFn);
 	if (index < 0) return;
 
 	instance.callbacks.splice(index, 1);
 }
 
-export * from './deep-proxy.ts'
+export * from './deep-proxy.ts';
 export * from './batch-observer.ts';
 
 export default createDeepObserver;
