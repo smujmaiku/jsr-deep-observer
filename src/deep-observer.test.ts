@@ -1,6 +1,6 @@
 import { expect, fn } from 'jsr:@std/expect';
 import createDeepObserver, {
-	ProxyEventCallbackFn,
+	type ProxyEventCallbackFn,
 	removeDeepObserver,
 } from './deep-observer.ts';
 

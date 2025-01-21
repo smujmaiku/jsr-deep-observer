@@ -2,6 +2,8 @@ export type PropT = string | symbol;
 
 export type ProxyEventCallbackFn = (prop: PropT[]) => void;
 
+const TARGET_SYMBOL: unique symbol = Symbol('target');
+
 function preventInvalidTypes(value: unknown): void {
 	if (value instanceof Map) throw new Error();
 	if (value instanceof Set) throw new Error();
@@ -11,7 +13,7 @@ function preventInvalidTypes(value: unknown): void {
 }
 
 function preventInvalidProps(prop: unknown): void {
-	if (prop === createDeepProxy.targetSymbol) throw new Error();
+	if (prop === TARGET_SYMBOL) throw new Error();
 }
 
 export function createDeepProxy<T extends object>(
@@ -22,7 +24,7 @@ export function createDeepProxy<T extends object>(
 
 	const { proxy: instance } = Proxy.revocable(target, {
 		get(state, prop) {
-			if (prop === createDeepProxy.targetSymbol) {
+			if (prop === TARGET_SYMBOL) {
 				return target;
 			}
 
@@ -50,7 +52,7 @@ export function createDeepProxy<T extends object>(
 			return result;
 		},
 		has(state, prop) {
-			if (prop === createDeepProxy.targetSymbol) {
+			if (prop === TARGET_SYMBOL) {
 				return true;
 			}
 			return Reflect.has(state, prop);
@@ -66,14 +68,14 @@ export function createDeepProxy<T extends object>(
 	return instance;
 }
 
-createDeepProxy.targetSymbol = Symbol('target');
+createDeepProxy.targetSymbol = TARGET_SYMBOL;
 
 export function checkDeepProxy<T extends object>(instance: T): instance is T {
-	return Reflect.has(instance, createDeepProxy.targetSymbol);
+	return Reflect.has(instance, TARGET_SYMBOL);
 }
 
 export function getDeepProxyTarget<T extends object>(instance: T): T {
-	const target = Reflect.get(instance, createDeepProxy.targetSymbol);
+	const target = Reflect.get(instance, TARGET_SYMBOL);
 	if (!target) throw new Error();
 
 	return target as T;

@@ -1,7 +1,7 @@
 import { FakeTime } from 'jsr:@std/testing/time';
 import { expect, fn } from 'jsr:@std/expect';
 import createDeepObserverBatched, {
-	BatchedEventCallbackFn,
+	type BatchedEventCallbackFn,
 	removeDeepObserverBatched,
 } from './batch-observer.ts';
 

@@ -2,7 +2,7 @@ import { expect, fn } from 'jsr:@std/expect';
 import createDeepProxy, {
 	checkDeepProxy,
 	getDeepProxyTarget,
-	ProxyEventCallbackFn,
+	type ProxyEventCallbackFn,
 } from './deep-proxy.ts';
 
 Deno.test('callback is called when instance changes', () => {
